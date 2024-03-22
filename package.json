@@ -1,0 +1,56 @@
+{
+  "name": "aliquamqui",
+  "version": "1.0.0",
+  "description": "Pure JavaScript RAR archive extractor by compile the official unrar lib by Emscripten.",
+  "homepage": "https://github.com/BrainKulas/aliquamqui.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BrainKulas/aliquamqui.git"
+  },
+  "main": "./dist/index.js",
+  "module": "./esm/index.esm.js",
+  "scripts": {
+    "prepare": "wget http://www.rarlab.com/rar/unrarsrc-6.0.2.tar.gz && tar -xf unrarsrc-6.0.2.tar.gz -C src/cpp && rm -rf unrarsrc-6.0.2.tar.gz && husky install",
+    "clean": "rm -rf dist coverage dist_map esm",
+    "clean:test": "rm -rf dist/test dist/build esm/test esm/build",
+    "lint": "eslint './src/**/*.ts' --max-warnings 0",
+    "tsc": "tsc",
+    "build:debug": "tsc && node ./dist/build/make.js",
+    "prebuild:release": "npm run lint",
+    "build:release": "npm run clean && tsc && node ./dist/build/make.js release && tsc -p tsconfig-esm.json && node ./dist/build/make.js release esm",
+    "test": "mocha dist/test/*.spec.js",
+    "test:debug": "npm run test -- --inspect-brk"
+  },
+  "keywords": [
+    "unrar"
+  ],
+  "author": "ForrestMraz",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/eslint": "^8.4.1",
+    "@types/mocha": "^9.1.0",
+    "@types/shelljs": "^0.8.11",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "mocha": "^9.2.0",
+    "prettier": "^2.5.1",
+    "shelljs": "^0.8.5",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "lint-staged": {
+    "*.{json,md,less,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix --max-warnings 0"
+    ]
+  }
+}
